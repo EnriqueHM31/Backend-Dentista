@@ -18,7 +18,7 @@ export class ModeloUsuario {
 
             const ID_USER = resultID.data.id as UUID;
 
-            const [resultDataUsuario] = await db.query<UsuarioEditarResponseProps[]>(`SELECT username, password FROM Usuario WHERE id = ?`, [ID_USER]);
+            const [resultDataUsuario] = await db.query<UsuarioEditarResponseProps[]>(`SELECT username, password FROM usuario WHERE id = ?`, [ID_USER]);
 
             if (!resultDataUsuario) throw new Error("No se ha encontrado el usuario");
 
@@ -61,12 +61,12 @@ export class ModeloUsuario {
 
             values.push(ID_USER);
 
-            const query = `UPDATE Usuario SET ${fields.join(', ')} WHERE id = ?`;
+            const query = `UPDATE usuario SET ${fields.join(', ')} WHERE id = ?`;
             const [resultModificarUsuario] = await db.query(query, values);
 
             if (!resultModificarUsuario) throw new Error('Error al modificar el usuario');
 
-            const [resultUsuarioModificado] = await db.query<UsuarioEditarResponseProps[]>('SELECT * FROM Usuario WHERE id = ?', [ID_USER]);
+            const [resultUsuarioModificado] = await db.query<UsuarioEditarResponseProps[]>('SELECT * FROM usuario WHERE id = ?', [ID_USER]);
 
             if (!resultUsuarioModificado) throw new Error('Error al obtener el usuario modificado');
 

@@ -9,7 +9,7 @@ import { MensajeCorreoAceptarSolicitud } from '../../utils/mensaje';
 export class ModeloCita {
     static async getAll() {
         try {
-            const [rows] = await db.query<CitaResponseProps[]>(`SELECT C.id,C.nombre, C.email, C.telefono, S.titulo AS servicio, C.comentarios, C.fecha, C.hora, C.completada, C.aceptada FROM Citas C JOIN ServiciosDentales S ON C.servicio = S.id ORDER BY C.fecha ASC`);
+            const [rows] = await db.query<CitaResponseProps[]>(`SELECT C.id,C.nombre, C.email, C.telefono, S.titulo AS servicio, C.comentarios, C.fecha, C.hora, C.completada, C.aceptada FROM citas C JOIN serviciosdentales S ON C.servicio = S.id ORDER BY C.fecha ASC`);
 
             return { success: true, message: "Citas obtenidas correctamente", citas: rows };
         } catch (error) {
@@ -22,14 +22,14 @@ export class ModeloCita {
             const id = generarIdUnico();
 
             const [ResultInsertCita] = await db.query(
-                `INSERT INTO Citas (id, nombre, email, telefono, comentarios, servicio, fecha, hora) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+                `INSERT INTO citas (id, nombre, email, telefono, comentarios, servicio, fecha, hora) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
                 [id, nombre, email, telefono, comentarios, servicio, fecha, hora]
             );
 
             if (!ResultInsertCita) return { success: false, message: 'No se insertó la cita', cita: {} };
 
 
-            const [ResultCitaCreada] = await db.query<CitaResponseProps[]>(`SELECT C.id,C.nombre, C.email, C.telefono, S.titulo AS servicio, C.comentarios, C.fecha, C.hora, C.completada, C.aceptada FROM Citas C JOIN ServiciosDentales S ON C.servicio = S.id AND C.id = ?`, [id]);
+            const [ResultCitaCreada] = await db.query<CitaResponseProps[]>(`SELECT C.id,C.nombre, C.email, C.telefono, S.titulo AS servicio, C.comentarios, C.fecha, C.hora, C.completada, C.aceptada FROM citas C JOIN serviciosdentales S ON C.servicio = S.id AND C.id = ?`, [id]);
 
             if (!ResultCitaCreada) return { success: false, message: 'No se insertó la cita', cita: {} };
 
@@ -43,7 +43,7 @@ export class ModeloCita {
 
     static async deleteCita(id: UUID) {
         try {
-            const [resultCitaEliminada] = await db.query(`DELETE FROM Citas WHERE id = ?`, [id]);
+            const [resultCitaEliminada] = await db.query(`DELETE FROM citas WHERE id = ?`, [id]);
             if (resultCitaEliminada) {
                 return { success: true, message: 'Cita eliminada correctamente', cita: { id } };
             } else {

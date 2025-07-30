@@ -5,7 +5,7 @@ import { generarIdUnico } from '../../utils/generador';
 export class ModeloPreguntas {
     static async getAll() {
         try {
-            const [resultPreguntas] = await db.query('SELECT id, pregunta, respuesta FROM Preguntas ORDER BY pregunta ASC');
+            const [resultPreguntas] = await db.query('SELECT id, pregunta, respuesta FROM preguntas ORDER BY pregunta ASC');
 
             if (!resultPreguntas) throw new Error('Error obteniendo preguntas');
 
@@ -18,11 +18,11 @@ export class ModeloPreguntas {
     static async createPregunta({ pregunta, respuesta }: PreguntaCrearProps) {
         try {
             const id = generarIdUnico();
-            const [resultInsertarPregunta] = await db.query('INSERT INTO Preguntas (id, pregunta, respuesta) VALUES (?, ?, ?)', [id, pregunta, respuesta]);
+            const [resultInsertarPregunta] = await db.query('INSERT INTO preguntas (id, pregunta, respuesta) VALUES (?, ?, ?)', [id, pregunta, respuesta]);
 
             if (!resultInsertarPregunta) throw new Error('Error al crear la pregunta');
 
-            const [resultPreguntaCreada] = await db.query<PreguntaCrearResponseProps[]>('SELECT * FROM Preguntas WHERE id = ?', [id]);
+            const [resultPreguntaCreada] = await db.query<PreguntaCrearResponseProps[]>('SELECT * FROM preguntas WHERE id = ?', [id]);
 
             if (!resultPreguntaCreada) throw new Error('Error al obtener la pregunta creada');
 
@@ -55,13 +55,13 @@ export class ModeloPreguntas {
 
             values.push(id);
 
-            const query = `UPDATE Preguntas SET ${fields.join(', ')} WHERE id = ?`;
+            const query = `UPDATE preguntas SET ${fields.join(', ')} WHERE id = ?`;
 
             const [ResultModificarPregunta] = await db.query(query, values);
 
             if (!ResultModificarPregunta) throw new Error('Error al modificar la pregunta');
 
-            const [ResultPreguntaModificada] = await db.query<PreguntaCrearResponseProps[]>('SELECT * FROM Preguntas WHERE id = ?', [id]);
+            const [ResultPreguntaModificada] = await db.query<PreguntaCrearResponseProps[]>('SELECT * FROM preguntas WHERE id = ?', [id]);
             if (!ResultPreguntaModificada) throw new Error('Error al obtener la pregunta modificada');
 
             const PreguntaModificada = ResultPreguntaModificada[0];
@@ -75,7 +75,7 @@ export class ModeloPreguntas {
 
     static async deletePregunta({ id }: { id: UUID }) {
         try {
-            const [resultEliminarPregunta] = await db.query('DELETE FROM Preguntas WHERE id = ?', [id]);
+            const [resultEliminarPregunta] = await db.query('DELETE FROM preguntas WHERE id = ?', [id]);
 
             if (!resultEliminarPregunta) throw new Error('Error al eliminar la pregunta');
 

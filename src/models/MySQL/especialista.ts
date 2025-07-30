@@ -6,7 +6,7 @@ import { generarIdUnico } from '../../utils/generador';
 export class ModeloEspecialista {
     static async getAll() {
         try {
-            const [resultDataEspecialistas] = await db.query(`SELECT e.id,e.nombre,e.apellido,e.email,e.telefono,e.direccion,e.avatar,e.linkedin,e.servicio,s.titulo AS servicio FROM Especialistas e JOIN ServiciosDentales s ON e.servicio = s.id ORDER BY e.nombre, e.apellido ASC;`);
+            const [resultDataEspecialistas] = await db.query(`SELECT e.id,e.nombre,e.apellido,e.email,e.telefono,e.direccion,e.avatar,e.linkedin,e.servicio,s.titulo AS servicio FROM especialistas e JOIN serviciosdentales s ON e.servicio = s.id ORDER BY e.nombre, e.apellido ASC;`);
 
             if (!resultDataEspecialistas) throw new Error('Error obteniendo especialistas');
 
@@ -24,13 +24,13 @@ export class ModeloEspecialista {
             const { nombre, apellido, email, telefono, direccion, avatar, linkedin, servicio } = dataEspecialista;
 
             const [resultCrearEspecialista] = await db.query(
-                `INSERT INTO Especialistas (id, nombre, apellido, email, telefono, direccion, avatar, linkedin, servicio) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,   // puedes agregar más en el futuro
+                `INSERT INTO especialistas (id, nombre, apellido, email, telefono, direccion, avatar, linkedin, servicio) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,   // puedes agregar más en el futuro
                 [id, nombre, apellido, email, telefono, direccion, avatar, linkedin, servicio]
             );
 
             if (!resultCrearEspecialista) throw new Error('Error al crear el especialista');
 
-            const [resultEspecialistaCreado] = await db.query<EspecialistaResponseProps[]>(`SELECT E.id,E.nombre,E.apellido,E.email,E.telefono,E.direccion,E.avatar,E.linkedin,S.titulo AS servicio FROM Especialistas E LEFT JOIN ServiciosDentales S ON E.servicio = S.id WHERE E.id = ?`, [id]);
+            const [resultEspecialistaCreado] = await db.query<EspecialistaResponseProps[]>(`SELECT E.id,E.nombre,E.apellido,E.email,E.telefono,E.direccion,E.avatar,E.linkedin,S.titulo AS servicio FROM especialistas E LEFT JOIN serviciosdentales S ON E.servicio = S.id WHERE E.id = ?`, [id]);
 
             if (!resultEspecialistaCreado) throw new Error('Error al obtener el especialista creado');
 
@@ -71,7 +71,7 @@ export class ModeloEspecialista {
 
             if (!resultEditarEspecialista) throw new Error('Error al editar el especialista');
 
-            const [resultEspecialistaEditado] = await db.query<EspecialistaResponseProps[]>(`SELECT E.id,E.nombre,E.apellido,E.email,E.telefono,E.direccion,E.avatar,E.linkedin,S.titulo AS servicio, S.id AS id_servicio FROM Especialistas E LEFT JOIN ServiciosDentales S ON E.servicio = S.id WHERE E.id = ?`, [id]);
+            const [resultEspecialistaEditado] = await db.query<EspecialistaResponseProps[]>(`SELECT E.id,E.nombre,E.apellido,E.email,E.telefono,E.direccion,E.avatar,E.linkedin,S.titulo AS servicio, S.id AS id_servicio FROM especialistas E LEFT JOIN serviciosdentales S ON E.servicio = S.id WHERE E.id = ?`, [id]);
 
             console.log("entro", resultEspecialistaEditado)
             if (!resultEspecialistaEditado) throw new Error('Error al obtener el especialista editado');
@@ -88,7 +88,7 @@ export class ModeloEspecialista {
 
     static async deleteEspecialista({ id }: { id: UUID }) {
         try {
-            const [resultEliminarEspecialista] = await db.query(`DELETE FROM Especialistas WHERE id = ?`, [id]);
+            const [resultEliminarEspecialista] = await db.query(`DELETE FROM especialistas WHERE id = ?`, [id]);
             if (!resultEliminarEspecialista) throw new Error('Error al eliminar el especialista');
 
             return { success: true, message: 'Especialista eliminado correctamente', especialista: { id } };

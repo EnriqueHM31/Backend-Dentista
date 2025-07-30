@@ -16,7 +16,7 @@ export class ModeloLogin {
 
         const id = process.env.USUARIO_ID;
         try {
-            const [result] = await db.query<Usuario[]>('SELECT * FROM Usuario WHERE id = ?', [id]);
+            const [result] = await db.query<Usuario[]>('SELECT * FROM usuario WHERE id = ?', [id]);
 
             if (result.length === 0) {
                 return { success: false, message: 'Usuario no encontrado.', token: '' };

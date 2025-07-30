@@ -9,11 +9,11 @@ export class ModeloServicio {
         try {
             const id = generarIdUnico();
 
-            const [resultCrearServicio] = await db.query(`INSERT INTO ServiciosDentales (id, titulo, descripcion, img, duration) VALUES (?, ?, ?, ?, 30)`, [id, titulo, descripcion, img, duration]);
+            const [resultCrearServicio] = await db.query(`INSERT INTO serviciosdentales (id, titulo, descripcion, img, duration) VALUES (?, ?, ?, ?, 30)`, [id, titulo, descripcion, img, duration]);
 
             if (!resultCrearServicio) throw new Error("No se pudo crear el servicio");
 
-            const [resultServicioCreado] = await db.query<ServicioResponseProps[]>(`SELECT * FROM ServiciosDentales WHERE id = ?`, [id]);
+            const [resultServicioCreado] = await db.query<ServicioResponseProps[]>(`SELECT * FROM serviciosdentales WHERE id = ?`, [id]);
 
             if (!resultServicioCreado) throw new Error("No se pudo obtener el servicio creado");
 
@@ -27,7 +27,7 @@ export class ModeloServicio {
 
     static async getServicios() {
         try {
-            const [resultDataServicioss] = await db.query(`SELECT id, titulo, descripcion, img, duration FROM ServiciosDentales ORDER BY titulo ASC`);
+            const [resultDataServicioss] = await db.query(`SELECT id, titulo, descripcion, img, duration FROM serviciosdentales ORDER BY titulo ASC`);
 
             if (!resultDataServicioss) throw new Error("No se pudo obtener los servicios");
 
@@ -39,7 +39,7 @@ export class ModeloServicio {
 
     static async getDisponibles() {
         try {
-            const [resultDataServiciosDisponibles] = await db.query(`SELECT s.id,s.titulo,s.descripcion,s.img,s.duration FROM ServiciosDentales s LEFT JOIN Especialistas e ON s.id = e.servicio WHERE e.servicio IS NULL;`);
+            const [resultDataServiciosDisponibles] = await db.query(`SELECT s.id,s.titulo,s.descripcion,s.img,s.duration FROM serviciosdentales s LEFT JOIN especialistas e ON s.id = e.servicio WHERE e.servicio IS NULL;`);
 
             if (!resultDataServiciosDisponibles) throw new Error("No se pudo obtener los servicios disponibles");
 
@@ -66,14 +66,14 @@ export class ModeloServicio {
 
         values.push(id); // Agrega el ID al final para el WHERE
 
-        const query = `UPDATE ServiciosDentales SET ${fields.join(', ')} WHERE id = ?`;
+        const query = `UPDATE serviciosdentales SET ${fields.join(', ')} WHERE id = ?`;
 
         try {
             const [resultEditarEspecialista] = await db.query(query, values);
 
             if (!resultEditarEspecialista) throw new Error('Error al editar el servicio');
 
-            const [resultServicioEditado] = await db.query<ServicioResponseProps[]>(`SELECT * FROM ServiciosDentales WHERE id = ?`, [id]);
+            const [resultServicioEditado] = await db.query<ServicioResponseProps[]>(`SELECT * FROM serviciosdentales WHERE id = ?`, [id]);
 
             if (!resultServicioEditado) throw new Error('Error al obtener el servicio editado');
 

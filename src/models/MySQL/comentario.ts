@@ -10,7 +10,7 @@ export class ModeloContacto {
 
     static async getComentarios() {
         try {
-            const [Comentarios] = await db.query('SELECT * FROM Comentarios');
+            const [Comentarios] = await db.query('SELECT * FROM comentarios');
 
             if (!Comentarios) throw new Error('Error obteniendo comentarios');
             return { success: true, message: "Comentarios obtenidos correctamente", comentarios: Comentarios };
@@ -21,7 +21,7 @@ export class ModeloContacto {
 
     static async getComentariosVisibles() {
         try {
-            const [ComentariosVisibles] = await db.query('SELECT * FROM Comentarios WHERE visible = 1');
+            const [ComentariosVisibles] = await db.query('SELECT * FROM comentarios WHERE visible = 1');
 
             if (!ComentariosVisibles) throw new Error('Error obteniendo comentarios visibles');
 
@@ -41,11 +41,11 @@ export class ModeloContacto {
 
             const id = generarIdUnico()
 
-            const [resultInsertarComentario] = await db.query('INSERT INTO Comentarios (id, nombre, ranking, email, servicio, mensaje, visible) VALUES (?, ?, ?, ?, ?, ?, ?)', [id, nombre, ranking, email, servicio, mensaje, true]);
+            const [resultInsertarComentario] = await db.query('INSERT INTO comentarios (id, nombre, ranking, email, servicio, mensaje, visible) VALUES (?, ?, ?, ?, ?, ?, ?)', [id, nombre, ranking, email, servicio, mensaje, true]);
 
             if (!resultInsertarComentario) throw new Error('Error al guardar el mensaje');
 
-            const [Comentario] = await db.query<ComentarioResponseProps[]>(`SELECT * FROM Comentarios WHERE id = ?`, [id]);
+            const [Comentario] = await db.query<ComentarioResponseProps[]>(`SELECT * FROM comentarios WHERE id = ?`, [id]);
 
             if (!Comentario) throw new Error('Error al obtener el mensaje');
 
@@ -60,7 +60,7 @@ export class ModeloContacto {
 
     static async updateComentario({ id, visible }: ComentarioEditarProps) {
         try {
-            const [resultModificarComentario] = await db.query('UPDATE Comentarios SET visible = ? WHERE id = ?', [visible, id]);
+            const [resultModificarComentario] = await db.query('UPDATE comentarios SET visible = ? WHERE id = ?', [visible, id]);
 
             if (!resultModificarComentario) throw new Error('Error al modificar el comentario');
 
@@ -80,7 +80,7 @@ export class ModeloContacto {
 
     static async deleteComentario({ id }: { id: UUID }) {
         try {
-            const [resultEliminarComentario] = await db.query('DELETE FROM Comentarios WHERE id = ?', [id]);
+            const [resultEliminarComentario] = await db.query('DELETE FROM comentarios WHERE id = ?', [id]);
 
             if (!resultEliminarComentario) throw new Error('Error al eliminar el comentario');
 

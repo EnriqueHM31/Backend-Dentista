@@ -6,7 +6,7 @@ import { generarIdUnico } from '../../utils/generador';
 export class ModeloSocial {
     static async getAll() {
         try {
-            const [resultRedesSociales] = await db.query('SELECT id, nombre, referencia FROM Sociales');
+            const [resultRedesSociales] = await db.query('SELECT id, nombre, referencia FROM sociales');
 
             if (!resultRedesSociales) throw new Error('Error obteniendo redes sociales');
 
@@ -20,7 +20,7 @@ export class ModeloSocial {
         try {
 
             const id = generarIdUnico();
-            const [resulCrearRedSocial] = await db.query('INSERT INTO Sociales (id, referencia) VALUES (?, ?)', [id, referencia]);
+            const [resulCrearRedSocial] = await db.query('INSERT INTO sociales (id, referencia) VALUES (?, ?)', [id, referencia]);
 
             if (!resulCrearRedSocial) throw new Error('Error al crear la red social');
 
@@ -32,7 +32,7 @@ export class ModeloSocial {
 
     static async deleteSocial({ id }: { id: UUID }) {
         try {
-            const [resultadoEliminarRedSocial] = await db.query('DELETE FROM Sociales WHERE id = ?', [id]);
+            const [resultadoEliminarRedSocial] = await db.query('DELETE FROM sociales WHERE id = ?', [id]);
 
             if (!resultadoEliminarRedSocial) throw new Error('Error al eliminar la red social');
 
@@ -45,7 +45,7 @@ export class ModeloSocial {
 
     static async updateSocial({ id, referencia }: { id: UUID, referencia: string }) {
         try {
-            const [resultadoModificarRedSocial] = await db.query('UPDATE Sociales SET referencia = ? WHERE id = ?', [referencia, id]);
+            const [resultadoModificarRedSocial] = await db.query('UPDATE sociales SET referencia = ? WHERE id = ?', [referencia, id]);
 
             if (!resultadoModificarRedSocial) throw new Error('Error al modificar la red social');
 

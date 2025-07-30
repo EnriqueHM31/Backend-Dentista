@@ -48,7 +48,7 @@ app.use('/api/servicios', ServiciosRoutes);
 app.use('/api/especialistas', EspecialistasRouter);
 app.use('/api/citas', CitasRouter);
 app.use("/", (_req, res) => {
-    res.send("Hola mundo desde Odontología LEHM");
+    res.send("Odontología LEHM");
 });
 
 app.listen(PORT, () => {

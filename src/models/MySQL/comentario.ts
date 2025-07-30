@@ -7,7 +7,6 @@ import { UUID } from '../../types/types';
 
 
 export class ModeloContacto {
-
     static async getComentarios() {
         try {
             const [Comentarios] = await db.query('SELECT * FROM comentarios');

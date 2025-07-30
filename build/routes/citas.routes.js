@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CitasRouter = void 0;
+const express_1 = require("express");
+const cita_1 = require("../controllers/cita");
+const verificarToken_1 = require("../middleware/verificarToken");
+exports.CitasRouter = (0, express_1.Router)();
+exports.CitasRouter.get('/', cita_1.CitasController.getAll);
+exports.CitasRouter.post('/', cita_1.CitasController.createCita);
+exports.CitasRouter.patch('/:id', verificarToken_1.verificarTokenDesdeCookie, cita_1.CitasController.updateCita);
+exports.CitasRouter.patch('/:id/aceptar', verificarToken_1.verificarTokenDesdeCookie, cita_1.CitasController.updateCitaAceptada);
+exports.CitasRouter.delete('/:id', verificarToken_1.verificarTokenDesdeCookie, cita_1.CitasController.deleteCita);

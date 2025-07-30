@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PreguntasRoutes = void 0;
+const express_1 = require("express");
+const preguntas_1 = require("../controllers/preguntas");
+const verificarToken_1 = require("../middleware/verificarToken");
+exports.PreguntasRoutes = (0, express_1.Router)();
+exports.PreguntasRoutes.get('/', preguntas_1.ControllerPreguntas.getAll);
+exports.PreguntasRoutes.post('/', verificarToken_1.verificarTokenDesdeCookie, preguntas_1.ControllerPreguntas.createPregunta);
+exports.PreguntasRoutes.put('/:id', verificarToken_1.verificarTokenDesdeCookie, preguntas_1.ControllerPreguntas.updatePregunta);
+exports.PreguntasRoutes.delete('/:id', verificarToken_1.verificarTokenDesdeCookie, preguntas_1.ControllerPreguntas.deletePregunta);

@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ComentariosRouter = void 0;
+const express_1 = require("express");
+const comentario_1 = require("../controllers/comentario");
+const verificarToken_1 = require("../middleware/verificarToken");
+exports.ComentariosRouter = (0, express_1.Router)();
+exports.ComentariosRouter.get('/', comentario_1.ContrallerContacto.getComentarios);
+exports.ComentariosRouter.post('/', comentario_1.ContrallerContacto.EnviarMensaje);
+exports.ComentariosRouter.get('/visibles', comentario_1.ContrallerContacto.getComentariosVisibles);
+exports.ComentariosRouter.put('/:id', verificarToken_1.verificarTokenDesdeCookie, comentario_1.ContrallerContacto.updateComentario);
+exports.ComentariosRouter.delete('/:id', verificarToken_1.verificarTokenDesdeCookie, comentario_1.ContrallerContacto.deleteComentario);

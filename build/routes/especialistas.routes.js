@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.EspecialistasRouter = void 0;
+const express_1 = require("express");
+const especialista_1 = require("../controllers/especialista");
+const verificarToken_1 = require("../middleware/verificarToken");
+exports.EspecialistasRouter = (0, express_1.Router)();
+exports.EspecialistasRouter.get('/', especialista_1.ControllerEspecialistas.getAll);
+exports.EspecialistasRouter.post('/', verificarToken_1.verificarTokenDesdeCookie, especialista_1.ControllerEspecialistas.createEspecialista);
+exports.EspecialistasRouter.patch('/:id', verificarToken_1.verificarTokenDesdeCookie, especialista_1.ControllerEspecialistas.updateEspecialista);
+exports.EspecialistasRouter.delete('/:id', verificarToken_1.verificarTokenDesdeCookie, especialista_1.ControllerEspecialistas.deleteEspecialista);

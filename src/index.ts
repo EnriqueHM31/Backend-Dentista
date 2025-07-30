@@ -18,7 +18,7 @@ const app = express();
 app.use(express.json());
 
 const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:5173',
-    'http://192.168.1.104:5173'];
+    'http://192.168.1.104:5173', 'https://dentista-ckilsr2uh-enrique-s-projects-104cc828.vercel.app/'];
 
 
 
@@ -47,8 +47,9 @@ app.use('/api/usuario', UsuarioRouter);
 app.use('/api/servicios', ServiciosRoutes);
 app.use('/api/especialistas', EspecialistasRouter);
 app.use('/api/citas', CitasRouter);
+
 app.use("/", (_req, res) => {
-    res.send("Odontología LEHM");
+    res.send("Servicios de Odontología LEHM");
 });
 
 app.listen(PORT, () => {

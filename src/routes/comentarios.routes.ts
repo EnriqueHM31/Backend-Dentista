@@ -4,7 +4,6 @@ import { verificarTokenDesdeCookie } from '../middleware/verificarToken';
 
 export const ComentariosRouter = Router();
 
-
 ComentariosRouter.get('/', ContrallerContacto.getComentarios)
 
 ComentariosRouter.post('/', ContrallerContacto.EnviarMensaje)

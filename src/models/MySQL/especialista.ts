@@ -74,7 +74,7 @@ export class ModeloEspecialista {
 
             values.push(id);
 
-            const query = `UPDATE Especialistas SET ${fields.join(', ')} WHERE id = ?`;
+            const query = `UPDATE especialistas SET ${fields.join(', ')} WHERE id = ?`;
 
             const [resultEditarEspecialista] = await connection.query(query, values);
 

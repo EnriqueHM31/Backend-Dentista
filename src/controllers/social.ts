@@ -15,7 +15,7 @@ export class ContrallerSocial {
                 res.status(500).json({ success, message, redesSociales: [] });
             }
         } catch (error) {
-            res.status(500).json({ message: 'Ocurrio un error interno del servidor' });
+            res.status(500).json({ success: false, message: error, redesSociales: [] });
         }
     }
 

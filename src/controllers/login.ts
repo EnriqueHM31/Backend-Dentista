@@ -1,8 +1,7 @@
 import type { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { ModeloLogin } from '../models/MySQL/login';
-import { NODE_ENV, NOMBRE_COOKIE } from '../config';
-import { SECRET } from '../config';
+import { NODE_ENV, NOMBRE_COOKIE, SECRET } from '../config';
 
 export class ControllerLogin {
 
@@ -34,7 +33,7 @@ export class ControllerLogin {
                 maxAge: 60 * 60 * 1000,
             });
 
-            res.status(200).json({ success: true, message: 'Sesión iniciada correctamente' });
+            res.status(200).json({ success: true, message: 'Sesión iniciada correctamente', token: token });
         } catch (error) {
             res.status(500).json({ success: false, message: 'Error al iniciar sesión: ' + error });
         }
@@ -44,20 +43,22 @@ export class ControllerLogin {
         const token = req.cookies.token;
 
         if (!SECRET) {
-            throw new Error("Ocurrió un error al verificar el token");
+            res.status(200).json({ success: false, message: "Ocurrió un error al verificar el token" });
         }
 
         if (!token) {
-            throw new Error("No autorizado");
+            res.status(200).json({ success: false, message: "No autorizado" });
         }
 
+
         try {
-            const decoded = jwt.verify(token, SECRET) as { role: string, username: string };
+            const decoded = jwt.verify(token, SECRET as string) as { role: string, username: string };
             res.json({ success: true, message: { role: decoded.role, username: decoded.username } });
         } catch (error) {
-            res.status(401).json({ success: false, message: error || 'Token inválido o expirado' });
+            res.status(401).json({ success: false, message: error instanceof Error ? error.message : 'Token inválido o expirado' });
         }
     }
+
 
     static async Logout(_req: Request, res: Response) {
         try {

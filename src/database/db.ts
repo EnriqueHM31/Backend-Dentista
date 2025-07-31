@@ -1,22 +1,22 @@
-import mysql, { Pool } from 'mysql2/promise';
+// lib/db.ts
+import mysql from 'mysql2/promise';
 
-export const db: Pool = mysql.createPool({
+declare global {
+    // Evita múltiples instancias en dev
+    var mysqlPool: mysql.Pool | undefined;
+}
+
+export const db = global.mysqlPool || mysql.createPool({
     host: process.env.DB_HOST!,
     user: process.env.DB_USER!,
     password: process.env.DB_PASSWORD!,
     database: process.env.DB_NAME!,
     port: Number(process.env.DB_PORT),
-    connectionLimit: 5, // pon 5 o menos para que no supere el límite Clever Cloud
-
+    waitForConnections: true,
+    connectionLimit: 5,
+    queueLimit: 0,
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 10000,
 });
-async function testConnections() {
-    const connection = await db.getConnection();
-    try {
-        const [rows] = await connection.query('SHOW PROCESSLIST');
-        console.log('Conexiones abiertas:', rows);
-    } finally {
-        connection.release();
-    }
-}
 
-testConnections();
+if (process.env.NODE_ENV !== 'production') global.mysqlPool = db;

@@ -31,8 +31,6 @@ export class ModeloLogin {
                 return { success: false, message: 'Contraseña incorrecta.', token: '' };
             }
 
-            console.log({ result });
-
             const token = jwt.sign({ role: 'admin', username: result[0].username }, JWT_SECRET, { expiresIn: '1h' });
 
             return { success: true, mesaage: 'Sesión iniciada correctamente', token: token };

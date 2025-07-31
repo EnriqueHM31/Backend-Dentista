@@ -24,11 +24,9 @@ export class ControllerLogin {
                 res.status(200).json({ success: false, message: message, token: '' });
             }
 
-            console.log({ token, NOMBRE_COOKIE, NODE_ENV });
-
             res.cookie(NOMBRE_COOKIE, token, {
                 httpOnly: true,
-                secure: false,
+                secure: NODE_ENV === 'production',
                 sameSite: 'lax',
                 maxAge: 60 * 60 * 1000,
             });

@@ -58,7 +58,7 @@ export class ModeloCita {
     static async updateCita({ id, completado }: CitaEditarProps) {
         try {
 
-            const [resultCitaModificada] = await db.query(`UPDATE Citas SET completada = ? WHERE id = ?`, [completado, id]);
+            const [resultCitaModificada] = await db.query(`UPDATE citas SET completada = ? WHERE id = ?`, [completado, id]);
 
             if (resultCitaModificada) {
                 return { success: true, message: 'Cita actualizada correctamente', cita: { id, completado } };
@@ -67,18 +67,18 @@ export class ModeloCita {
             }
         }
         catch (error) {
-            return { success: false, message: 'Error al actualizar la cita', cita: {} };
+            return { success: false, message: 'Error al actualizar la cita' + error, cita: {} };
         }
     }
 
     static async updateCitaAceptada({ id }: { id: UUID }) {
         try {
             const VALOR_ACEPTAR = true;
-            const [resultCitaModificada] = await db.query(`UPDATE Citas SET aceptada = ? WHERE id = ?`, [VALOR_ACEPTAR, id]);
+            const [resultCitaModificada] = await db.query(`UPDATE citas SET aceptada = ? WHERE id = ?`, [VALOR_ACEPTAR, id]);
 
             if (!resultCitaModificada) throw new Error('No se encontró la cita o no se realizaron cambios');
 
-            const [dataCitaAceptada] = await db.query<CitaResponseProps[]>(`SELECT C.id,C.nombre, C.email, C.telefono, S.titulo AS servicio, C.comentarios, C.fecha, C.hora, C.completada, C.aceptada FROM Citas C JOIN ServiciosDentales S ON C.servicio = S.id AND C.id = ?`, [id]);
+            const [dataCitaAceptada] = await db.query<CitaResponseProps[]>(`SELECT C.id,C.nombre, C.email, C.telefono, S.titulo AS servicio, C.comentarios, C.fecha, C.hora, C.completada, C.aceptada FROM citas C JOIN serviciosdentales S ON C.servicio = S.id AND C.id = ?`, [id]);
 
             const citaAceptada = dataCitaAceptada[0];
             const mailOptions = MensajeCorreoAceptarSolicitud(citaAceptada)
@@ -90,7 +90,7 @@ export class ModeloCita {
             return { success: true, message: 'Cita actualizada correctamente', cita: { id } };
         }
         catch (error) {
-            return { success: false, message: error || 'Error al actualizar la cita', cita: {} };
+            return { success: false, message: error || 'Error al actualizar la cita' + error, cita: {} };
         }
     }
 }

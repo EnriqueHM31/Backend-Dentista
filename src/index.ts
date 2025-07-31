@@ -22,20 +22,16 @@ const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001', 'http:
 
 
 
-
 app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin) return callback(null, true); // para herramientas como Postman
-
-        if (allowedOrigins.indexOf(origin) === -1) {
-            return callback(new Error('El CORS no permite el acceso desde este origen.'), false);
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('El CORS no permite el acceso desde este origen.'));
         }
-
-        return callback(null, true);
     },
-    credentials: true,
+    credentials: true
 }));
-
 app.use(cookieParser());
 
 

@@ -2,10 +2,6 @@ import { RowDataPacket } from 'mysql2';
 import { db } from '../../database/db';
 import jwt from 'jsonwebtoken';
 
-export const JWT_SECRET = process.env.SECRET ?? (() => {
-    throw new Error("SECRET no está definido en .env");
-})();
-
 interface Usuario extends RowDataPacket {
     username: string;
     password: string;
@@ -14,6 +10,10 @@ interface Usuario extends RowDataPacket {
 export class ModeloLogin {
     static async InicioSesion(username: string, password: string) {
 
+        const JWT_SECRET = process.env.SECRET;
+        if (!JWT_SECRET) {
+            throw new Error("Ocurrió un error al verificar el token");
+        }
         const id = process.env.USUARIO_ID;
         try {
             const [result] = await db.query<Usuario[]>('SELECT * FROM usuario WHERE id = ?', [id]);
@@ -30,12 +30,14 @@ export class ModeloLogin {
                 return { success: false, message: 'Contraseña incorrecta.', token: '' };
             }
 
+            console.log({ result });
+
             const token = jwt.sign({ role: 'admin', username: result[0].username }, JWT_SECRET, { expiresIn: '1h' });
 
             return { success: true, mesaage: 'Sesión iniciada correctamente', token: token };
 
         } catch (error) {
-            return { success: false, message: 'Error al iniciar sesión', token: '' };
+            return { success: false, message: error || 'Error al iniciar sesión', token: '' };
         }
     }
 }

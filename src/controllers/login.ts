@@ -22,12 +22,14 @@ export class ControllerLogin {
             const { success, message, token } = await ModeloLogin.InicioSesion(username, password);
 
             if (!success) {
-                res.status(200).json({ success: false, message: message });
+                res.status(200).json({ success: false, message: message, token: '' });
             }
+
+            console.log({ token, NOMBRE_COOKIE, NODE_ENV });
 
             res.cookie(NOMBRE_COOKIE, token, {
                 httpOnly: true,
-                secure: NODE_ENV === 'production',
+                secure: false,
                 sameSite: 'lax',
                 maxAge: 60 * 60 * 1000,
             });
@@ -46,14 +48,14 @@ export class ControllerLogin {
         }
 
         if (!token) {
-            res.status(200).json({ success: false, message: 'No autorizado' });
+            throw new Error("No autorizado");
         }
 
         try {
             const decoded = jwt.verify(token, SECRET) as { role: string, username: string };
             res.json({ success: true, message: { role: decoded.role, username: decoded.username } });
         } catch (error) {
-            res.status(401).json({ success: false, message: 'Token inválido o expirado' });
+            res.status(401).json({ success: false, message: error || 'Token inválido o expirado' });
         }
     }
 

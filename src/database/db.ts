@@ -6,10 +6,17 @@ export const db: Pool = mysql.createPool({
     password: process.env.DB_PASSWORD!,
     database: process.env.DB_NAME!,
     port: Number(process.env.DB_PORT),
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0,
-    enableKeepAlive: true,
-    keepAliveInitialDelay: 10000, // en ms (10s)
-});
+    connectionLimit: 5, // pon 5 o menos para que no supere el límite Clever Cloud
 
+});
+async function testConnections() {
+    const connection = await db.getConnection();
+    try {
+        const [rows] = await connection.query('SHOW PROCESSLIST');
+        console.log('Conexiones abiertas:', rows);
+    } finally {
+        connection.release();
+    }
+}
+
+testConnections();

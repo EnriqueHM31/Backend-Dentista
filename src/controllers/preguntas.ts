@@ -16,7 +16,7 @@ export class ControllerPreguntas {
                 res.status(500).json({ success, message, preguntas: [] });
             }
         } catch (error) {
-            res.status(500).json({ success: false, message: 'Error al obtener las preguntas', preguntas: [] });
+            res.status(500).json({ success: false, message: 'Error al obtener las preguntas' + error, preguntas: [] });
         }
     }
 

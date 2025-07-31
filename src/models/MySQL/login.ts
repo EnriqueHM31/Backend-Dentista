@@ -9,6 +9,7 @@ interface Usuario extends RowDataPacket {
 
 export class ModeloLogin {
     static async InicioSesion(username: string, password: string) {
+        const connection = await db.getConnection();
 
         const JWT_SECRET = process.env.SECRET;
         if (!JWT_SECRET) {
@@ -16,7 +17,7 @@ export class ModeloLogin {
         }
         const id = process.env.USUARIO_ID;
         try {
-            const [result] = await db.query<Usuario[]>('SELECT * FROM usuario WHERE id = ?', [id]);
+            const [result] = await connection.query<Usuario[]>('SELECT * FROM usuario WHERE id = ?', [id]);
 
             if (result.length === 0) {
                 return { success: false, message: 'Usuario no encontrado.', token: '' };
@@ -38,6 +39,9 @@ export class ModeloLogin {
 
         } catch (error) {
             return { success: false, message: error || 'Error al iniciar sesión', token: '' };
+        } finally {
+            connection.release();
         }
+
     }
 }

@@ -75,7 +75,7 @@ export class ModeloContacto {
 
             if (!resultModificarComentario) throw new Error('Error al modificar el comentario');
 
-            const [resultComentarioModificado] = await connection.query<ComentarioEditarResponseProps[]>('SELECT id, visible FROM Comentarios WHERE id = ?', [id]);
+            const [resultComentarioModificado] = await connection.query<ComentarioEditarResponseProps[]>('SELECT id, visible FROM comentarios WHERE id = ?', [id]);
 
             if (!resultComentarioModificado) throw new Error('Error al obtener el comentario modificado');
 

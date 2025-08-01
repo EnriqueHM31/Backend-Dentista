@@ -107,7 +107,7 @@ export class ModeloServicio {
         const connection = await db.getConnection();
 
         try {
-            const [resultServicioEliminado] = await connection.query(`DELETE FROM ServiciosDentales WHERE id = ?`, [id]);
+            const [resultServicioEliminado] = await connection.query(`DELETE FROM serviciosdentales WHERE id = ?`, [id]);
 
             if (!resultServicioEliminado) throw new Error('Error al eliminar el servicio');
 

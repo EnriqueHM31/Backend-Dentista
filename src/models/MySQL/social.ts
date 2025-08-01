@@ -62,7 +62,7 @@ export class ModeloSocial {
 
             if (!resultadoModificarRedSocial) throw new Error('Error al modificar la red social');
 
-            const [resultadoRedSocialObtenida] = await connection.query<SocialResponseProps[]>('SELECT id, referencia FROM Sociales WHERE id = ?', [id]);
+            const [resultadoRedSocialObtenida] = await connection.query<SocialResponseProps[]>('SELECT id, referencia FROM sociales WHERE id = ?', [id]);
 
             if (!resultadoRedSocialObtenida) throw new Error('Error al obtener la red social modificada');
 

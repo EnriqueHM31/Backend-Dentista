@@ -28,7 +28,7 @@ export class ControllerLogin {
             res.cookie(NOMBRE_COOKIE, token, {
                 httpOnly: true,
                 secure: NODE_ENV === 'production',
-                sameSite: 'lax',
+                sameSite: 'none',
                 maxAge: 60 * 60 * 1000,
                 path: '/',
             });

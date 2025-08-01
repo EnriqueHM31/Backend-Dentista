@@ -1,4 +1,4 @@
-import type { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { ModeloLogin } from '../models/MySQL/login';
 import { NODE_ENV, NOMBRE_COOKIE, SECRET } from '../config';
@@ -24,11 +24,13 @@ export class ControllerLogin {
                 res.status(200).json({ success: false, message: message, token: '' });
             }
 
+            console.log({ value: NODE_ENV === "production" });
             res.cookie(NOMBRE_COOKIE, token, {
                 httpOnly: true,
                 secure: NODE_ENV === 'production',
                 sameSite: 'lax',
                 maxAge: 60 * 60 * 1000,
+                path: '/',
             });
 
             res.status(200).json({ success: true, message: 'Sesión iniciada correctamente', token: token });
@@ -39,21 +41,18 @@ export class ControllerLogin {
 
     static async Autenticacion(req: Request, res: Response) {
         const token = req.cookies.token;
+        console.log('hola', { hola: req.cookies })
+        console.log('secret', { SECRET })
+        console.log('token', { token })
+        if (!SECRET) throw new Error("No se ha definido el SECRET");
 
-        if (!SECRET) {
-            res.status(200).json({ success: false, message: "Ocurrió un error al verificar el token" });
-        }
-
-        if (!token) {
-            res.status(200).json({ success: false, message: "No autorizado" });
-        }
-
+        if (!token) throw new Error("No se ha proporcionado el token");
 
         try {
-            const decoded = jwt.verify(token, SECRET as string) as { role: string, username: string };
+            const decoded = jwt.verify(token, SECRET) as { role: string, username: string };
             res.json({ success: true, message: { role: decoded.role, username: decoded.username } });
         } catch (error) {
-            res.status(401).json({ success: false, message: error instanceof Error ? error.message : 'Token inválido o expirado' });
+            res.status(401).json({ success: false, message: error || 'Token inválido o expirado' });
         }
     }
 

@@ -11,12 +11,12 @@ export class ModeloLogin {
     static async InicioSesion(username: string, password: string) {
         const connection = await db.getConnection();
 
-        const JWT_SECRET = process.env.SECRET;
-        if (!JWT_SECRET) {
-            throw new Error("Ocurrió un error al verificar el token");
-        }
-        const id = process.env.USUARIO_ID;
         try {
+            const id = process.env.USUARIO_ID;
+            const JWT_SECRET = process.env.SECRET;
+            if (!JWT_SECRET) {
+                throw new Error("Ocurrió un error al verificar el token");
+            }
             const [result] = await connection.query<Usuario[]>('SELECT * FROM usuario WHERE id = ?', [id]);
 
             if (result.length === 0) {

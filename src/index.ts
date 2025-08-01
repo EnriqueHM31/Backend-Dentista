@@ -16,6 +16,7 @@ import { PORT } from './config';
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 
 const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:5173',
     'http://192.168.1.104:5173', 'https://dentista-ckilsr2uh-enrique-s-projects-104cc828.vercel.app', 'https://dentista-web-eight.vercel.app'];
@@ -32,7 +33,6 @@ app.use(cors({
     },
     credentials: true
 }));
-app.use(cookieParser());
 
 
 app.use('/api/comentarios', ComentariosRouter);

@@ -44,12 +44,12 @@ export class ControllerLogin {
         console.log('hola', { hola: req.cookies })
         console.log('secret', { SECRET })
         console.log('token', { token })
-        if (!SECRET) throw new Error("No se ha definido el SECRET");
+        if (!SECRET) res.status(401).json({ success: false, message: 'No se ha definido el valor' });
 
-        if (!token) throw new Error("No se ha proporcionado el token");
+        if (!token) res.status(200).json({ success: false, message: 'Token no encontrado' });
 
         try {
-            const decoded = jwt.verify(token, SECRET) as { role: string, username: string };
+            const decoded = jwt.verify(token, SECRET as string) as { role: string, username: string };
             res.json({ success: true, message: { role: decoded.role, username: decoded.username } });
         } catch (error) {
             res.status(401).json({ success: false, message: error || 'Token inválido o expirado' });
